@@ -1,0 +1,13 @@
+<% if p('bpm.enabled') %>
+check process redis
+  with pidfile /var/vcap/sys/run/bpm/sentinel/sentinel.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start sentinel"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop sentinel"
+  group vcap
+<% else %>
+check process sentinel
+  with pidfile /var/vcap/sys/run/sentinel/sentinel.pid
+  start program "/var/vcap/jobs/sentinel/bin/ctl start"
+  stop program "/var/vcap/jobs/sentinel/bin/ctl stop"
+  group vcap
+<% end %>

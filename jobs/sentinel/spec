@@ -1,0 +1,26 @@
+---
+name: sentinel 
+
+templates:
+  config/bpm.yml: config/bpm.yml
+  config/sentinel.conf.erb: config/sentinle.conf
+  bin/health_check: bin/health_check  
+  bin/ctl.erb : bin/ctl
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh  
+
+packages:
+  - redis
+
+properties:
+
+  health.force_failure:
+    description: Fails heathcheck, for testing
+    default: false
+
+  bpm.enabled:
+    default: false
+
+  base_dir:
+    description: Base dir for storing database files
+    default: /var/vcap/store/redis  

@@ -1,0 +1,30 @@
+name: redis-sentinel
+releases:
+- name: redis-sentinel-bosh 
+  version: latest
+stemcells: 
+- alias: default 
+  os: ubuntu-trusty
+  version: latest
+
+update:
+  canaries: 1
+  max_in_flight: 10
+  update_watch_time: 10000-200000
+  canary_watch_time: 10000-200000
+
+instance_groups: 
+- name: redis
+  instances: 1
+  vm_type: medium  
+  stemcell: default
+  networks:
+  - name: default
+  azs: [z1]
+  jobs:
+    - release: redis-sentinel-bosh
+      name:  redis
+      properties: {}
+    - release: redis-sentinel-bosh                                                                                                      
+      name: sentinel
+      properties: {}    
