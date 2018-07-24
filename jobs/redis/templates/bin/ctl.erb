@@ -14,11 +14,20 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    exec redis-server /var/vcap/jobs/redis/config/redis.conf
+    ### This will be in helper                                                                                                          
+    chmod 770 /var/vcap/jobs/redis/config/redis.conf                                                                              
+    touch $LOG_DIR/redis.log $LOG_DIR/redis.err.log                                                                               
+    chown vcap:vcap $LOG_DIR/redis.log $LOG_DIR/redis.err.log                                                                     
+    ### EOF of helper 
+
+    exec chpst -u vcap:vcap redis-server /var/vcap/jobs/redis/config/redis.conf \
+    1>>$LOG_DIR/redis.log \
+    2>>$LOG_DIR/redis.err.log
+    
     ;;
 
   stop)
-    redis-cli shutdown
+    redis-cli -h <%= spec.address %> -a <%= p("master.password") %> shutdown
     kill_and_wait $PIDFILE
 
     ;;

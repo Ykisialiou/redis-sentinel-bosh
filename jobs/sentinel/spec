@@ -3,7 +3,7 @@ name: sentinel
 
 templates:
   config/bpm.yml: config/bpm.yml
-  config/sentinel.conf.erb: config/sentinle.conf
+  config/sentinel.conf.erb: config/sentinel.conf
   bin/health_check: bin/health_check  
   bin/ctl.erb : bin/ctl
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
@@ -12,15 +12,27 @@ templates:
 packages:
   - redis
 
+consumes:
+  - name: redis
+    type: redis
+
 properties:
+
+  base_dir:
+    description: Path for sentinel LRPs. Supposed to live on persistent disk
+    default: /var/vcap/store/sentinel
 
   health.force_failure:
     description: Fails heathcheck, for testing
     default: false
 
+  redis_cluster_name:
+    description: Name of redis cluster, specified by sentinel
+    default: redismasterslave
+
+  log.level:
+    description: Log level for sentinel process
+    default: verbose
+
   bpm.enabled:
     default: false
-
-  base_dir:
-    description: Base dir for storing database files
-    default: /var/vcap/store/redis  

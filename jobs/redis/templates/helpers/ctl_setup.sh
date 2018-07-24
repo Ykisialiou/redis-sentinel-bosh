@@ -20,7 +20,7 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 chmod 755 $JOB_DIR # to access file via symlink
 
 source $JOB_DIR/helpers/ctl_utils.sh
-redirect_output ${OUTPUT_LABEL}
+###redirect_output ${OUTPUT_LABEL}
 
 export HOME=${HOME:-/home/vcap}
 

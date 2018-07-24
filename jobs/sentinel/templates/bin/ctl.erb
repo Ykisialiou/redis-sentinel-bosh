@@ -3,7 +3,7 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-source /var/vcap/jobs/redis/helpers/ctl_setup.sh 'sentinel'
+source /var/vcap/jobs/sentinel/helpers/ctl_setup.sh 'sentinel'
 
 export LANG=en_US.UTF-8
 
@@ -14,11 +14,19 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    exec redis-sentinel /var/vcap/jobs/sentinel/config/sentinel.conf
+    ### This will be in helper
+    chmod 770 /var/vcap/jobs/sentinel/config/sentinel.conf
+    touch $LOG_DIR/sentinel.log $LOG_DIR/sentinel.err.log
+    chown vcap:vcap $LOG_DIR/sentinel.log $LOG_DIR/sentinel.err.log
+    ### EOF of helper
+
+    exec chpst -u vcap:vcap redis-sentinel /var/vcap/jobs/sentinel/config/sentinel.conf \
+    1>>$LOG_DIR/sentinel.log \
+    2>>$LOG_DIR/sentinel.err.log
+    
     ;;
 
   stop)
-    redis-cli shutdown
     kill_and_wait $PIDFILE
 
     ;;

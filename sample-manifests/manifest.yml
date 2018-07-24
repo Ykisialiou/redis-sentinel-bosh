@@ -13,18 +13,25 @@ update:
   update_watch_time: 10000-200000
   canary_watch_time: 10000-200000
 
+variables:
+- name: redis-password
+  type: password  
+
 instance_groups: 
 - name: redis
-  instances: 1
+  instances: 3 
   vm_type: medium  
   stemcell: default
+  persistent_disk_pool: 5GB 
   networks:
   - name: default
   azs: [z1]
   jobs:
     - release: redis-sentinel-bosh
       name:  redis
-      properties: {}
+      properties:
+        master:
+          password: ((redis-password))
     - release: redis-sentinel-bosh                                                                                                      
       name: sentinel
       properties: {}    

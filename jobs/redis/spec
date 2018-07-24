@@ -12,8 +12,29 @@ templates:
 packages:
   - redis
 
+provides:
+  - name: redis
+    type: redis
+    properties:
+    - port
+    - master.password
+    - base_dir
+consumes:
+  - name: redis
+    type: redis
+
 properties:
 
+  log.level: 
+    default: verbose 
+    description: Log level for redis process
+     
+  port:
+    default: 6379
+
+  master.password:
+    description: Password to protect redis master 
+  
   health.force_failure:
     description: Fails heathcheck, for testing
     default: false

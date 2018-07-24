@@ -37,9 +37,9 @@ link_job_file() {
 # If loaded from 'source ../utils.sh' then normal STDOUT
 redirect_output() {
   SCRIPT=$1
-  mkdir -p /var/vcap/sys/log/monit
-  exec 1>> /var/vcap/sys/log/monit/$SCRIPT.log
-  exec 2>> /var/vcap/sys/log/monit/$SCRIPT.err.log
+  mkdir -p /var/vcap/sys/log/$SCRIPT
+  exec 1>> /var/vcap/sys/log/$SCRIPT/$SCRIPT.log
+  exec 2>> /var/vcap/sys/log/$SCRIPT/$SCRIPT.err.log
 }
 
 pid_guard() {
